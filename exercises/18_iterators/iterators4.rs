@@ -10,10 +10,17 @@ fn factorial(num: u64) -> u64 {
     // - additional variables
     // For an extra challenge, don't use:
     // - recursion
+    (0..=num)
+        .map(|x| match x {
+            0 => 1,
+            _ => x,
+        })
+        .product()
 }
 
 fn main() {
     // You can optionally experiment here.
+    println!("{}", factorial(4));
 }
 
 #[cfg(test)]

@@ -6,7 +6,7 @@
 
 use std::collections::HashMap;
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 enum Progress {
     None,
     Some,
@@ -28,6 +28,7 @@ fn count_for(map: &HashMap<String, Progress>, value: Progress) -> usize {
 fn count_iterator(map: &HashMap<String, Progress>, value: Progress) -> usize {
     // `map` is a hash map with `String` keys and `Progress` values.
     // map = { "variables1": Complete, "from_str": None, … }
+    map.values().filter(|&x| *x == value).count()
 }
 
 fn count_collection_for(collection: &[HashMap<String, Progress>], value: Progress) -> usize {
@@ -48,10 +49,48 @@ fn count_collection_iterator(collection: &[HashMap<String, Progress>], value: Pr
     // `collection` is a slice of hash maps.
     // collection = [{ "variables1": Complete, "from_str": None, … },
     //               { "variables2": Complete, … }, … ]
+    collection
+        .iter()
+        .map(|x| x.values().filter(|&y| *y == value).count())
+        .sum()
+    //.values()
+    //.filter(|&x| *x == value)
+    //.count()
 }
 
 fn main() {
     // You can optionally experiment here.
+    let x = get_vec_map();
+    count_collection_iterator(&x, Progress::Complete);
+}
+
+fn get_map() -> HashMap<String, Progress> {
+    use Progress::*;
+
+    let mut map = HashMap::new();
+    map.insert(String::from("variables1"), Complete);
+    map.insert(String::from("functions1"), Complete);
+    map.insert(String::from("hashmap1"), Complete);
+    map.insert(String::from("arc1"), Some);
+    map.insert(String::from("as_ref_mut"), None);
+    map.insert(String::from("from_str"), None);
+
+    map
+}
+
+fn get_vec_map() -> Vec<HashMap<String, Progress>> {
+    use Progress::*;
+
+    let map = get_map();
+
+    let mut other = HashMap::new();
+    other.insert(String::from("variables2"), Complete);
+    other.insert(String::from("functions2"), Complete);
+    other.insert(String::from("if1"), Complete);
+    other.insert(String::from("from_into"), None);
+    other.insert(String::from("try_from_into"), None);
+
+    vec![map, other]
 }
 
 #[cfg(test)]
