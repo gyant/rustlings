@@ -10,7 +10,17 @@
 
 // TODO: Write a function that calculates the price of an order of apples given
 // the quantity bought.
-// fn calculate_price_of_apples(???) -> ??? { ??? }
+fn calculate_price_of_apples(qty: u32) -> u32 {
+    let rustbucks: u32;
+
+    if qty > 40 {
+        rustbucks = 1;
+    } else {
+        rustbucks = 2;
+    }
+
+    qty * rustbucks
+}
 
 fn main() {
     // You can optionally experiment here.
